@@ -14,11 +14,15 @@ public:
 
   void useAsOutput();
 
-  int readRelativeVoltage();
+  void useAsInput();
 
-  void setHigh();
+  int readAnalog();
 
-  void setLow();
+  int readDigital();
+
+  void writeHigh();
+
+  void writeLow();
 
   void modulate(float dutyFactor);
 };

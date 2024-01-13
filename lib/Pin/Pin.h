@@ -24,5 +24,5 @@ public:
 
   void writeLow();
 
-  void modulate(float dutyFactor);
+  void modulate(int dutyFactor);
 };

@@ -10,8 +10,8 @@ inline void report(SerialMessage message, bool omitNewLine = false)
   Serial.print(message);
 }
 
-template <typename ValueName, typename Value>
-inline void reportValue(Value value, ValueName valueName = "value")
+template <typename Value>
+inline void reportValue(Value value, const char *valueName = "value")
 {
   report(valueName);
   report(": ", true);

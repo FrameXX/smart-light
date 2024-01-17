@@ -1,21 +1,19 @@
 #include <Pin.h>
-#include <LightEmittingDiode.h>
 #include <IlluminanceSensor.h>
-#include <AdaptiveLED.h>
 #include <Report.h>
 #include <Ticker.h>
+#include <IlluminanceModulatedSupply.h>
 
 Pin LEDSupplyPin(5);
 Pin IlluminanceSensorSupplyPin(16);
 Pin IlluminanceSensorAnalogPin(A0);
-LightEmittingDiode lightEmittingDiode(LEDSupplyPin);
 IlluminanceSensor
     illuminanceSensor(IlluminanceSensorSupplyPin, IlluminanceSensorAnalogPin);
-AdaptiveLED adaptiveLED(lightEmittingDiode, illuminanceSensor, 10);
+IlluminanceModulatedSupply LEDSupply(LEDSupplyPin, illuminanceSensor, 10);
 
 void updateAdaptiveLed()
 {
-  adaptiveLED.update();
+  LEDSupply.update();
 }
 
 Ticker adaptiveLEDTIcker(updateAdaptiveLed, 25);

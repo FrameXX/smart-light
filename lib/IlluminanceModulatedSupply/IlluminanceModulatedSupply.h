@@ -14,7 +14,9 @@ private:
   float minBrightnessIluminance;
 
 public:
-  IlluminanceModulatedSupply(const Pin &supplyPIN, const IlluminanceSensor &illuminanceSensor, int illuminanceMeasurements, float maxBrightnessIluminance = 100, float minBrightnessIluminance = 400);
+  IlluminanceModulatedSupply(const Pin &supplyPIN, const IlluminanceSensor &illuminanceSensor, int illuminanceMeasurements, float maxBrightnessIluminance = 0, float minBrightnessIluminance = 500);
 
   void update();
+
+  void setIlluminanceMeasurementsSize(int size);
 };

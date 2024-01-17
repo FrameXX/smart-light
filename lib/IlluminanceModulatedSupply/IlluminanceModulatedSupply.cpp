@@ -4,6 +4,7 @@
 #include <RollingAverage.h>
 #include <Report.h>
 #include <Pin.h>
+#include <Clamp.h>
 
 IlluminanceModulatedSupply::IlluminanceModulatedSupply(const Pin &supplyPIN,
                                                        const IlluminanceSensor &illuminanceSensor,
@@ -24,9 +25,15 @@ void IlluminanceModulatedSupply::update()
 
   const int averageIlluminance = illuminanceMeasurements.getAverage();
   reportValue(averageIlluminance, "averageIlluminance");
+
   const int absoluteBrightness = map(averageIlluminance, this->minBrightnessIluminance, this->maxBrightnessIluminance, 0, 255);
-  const int brightness = max<int>(min<float>(absoluteBrightness, 255), 0);
+  const int brightness = clamp(absoluteBrightness, 0, 255);
   reportValue(brightness, "brightness");
 
   this->supplyPIN.modulate(brightness);
+}
+
+void IlluminanceModulatedSupply::setIlluminanceMeasurementsSize(int size)
+{
+  this->illuminanceMeasurements.resize(size);
 }

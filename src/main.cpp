@@ -3,6 +3,8 @@
 #include <Report.h>
 #include <Ticker.h>
 #include <IlluminanceModulatedSupply.h>
+#include <WifiCredentials.h>
+#include <WiFiConnection.h>
 
 Pin LEDSupplyPin(5);
 Pin IlluminanceSensorSupplyPin(16);
@@ -10,6 +12,7 @@ Pin IlluminanceSensorAnalogPin(A0);
 IlluminanceSensor
     illuminanceSensor(IlluminanceSensorSupplyPin, IlluminanceSensorAnalogPin);
 IlluminanceModulatedSupply LEDSupply(LEDSupplyPin, illuminanceSensor, 10);
+WiFiConnection wifi(WIFI_SSID, WIFI_PASS);
 
 void updateAdaptiveLed()
 {

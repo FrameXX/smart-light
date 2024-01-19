@@ -1,8 +1,10 @@
 #pragma once
 
+#include <Arduino.h>
 #include <IlluminanceSensor.h>
 #include <RollingAverage.h>
 #include <Pin.h>
+#include <Clamp.h>
 
 class IlluminanceModulatedSupply
 {

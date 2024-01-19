@@ -1,5 +1,8 @@
 #pragma once
 
+#include <ESP8266WiFi.h>
+#include <Report.h>
+
 class WiFiConnection
 {
 private:
@@ -11,5 +14,9 @@ private:
 public:
   WiFiConnection(const char *SSID, const char *password);
 
-  bool inquireConnection();
+  bool getConnected();
+
+  void keepAlive();
+
+  void resolveEvent(WiFiEvent_t event);
 };

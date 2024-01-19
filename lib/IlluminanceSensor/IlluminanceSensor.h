@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Pin.h>
+#include <Arduino.h>
 
 class IlluminanceSensor
 {

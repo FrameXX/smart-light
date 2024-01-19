@@ -1,5 +1,4 @@
 #include <IlluminanceSensor.h>
-#include <Arduino.h>
 
 IlluminanceSensor::IlluminanceSensor(const Pin &supplyPin, const Pin &analogPin) : supplyPin(supplyPin), analogPin(analogPin)
 {

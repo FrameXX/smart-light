@@ -1,9 +1,8 @@
 #include <WiFiConnection.h>
-#include <ESP8266WiFi.h>
 
-WiFiConnection::WiFiConnection(const char *SSID, const char *password)
+WiFiConnection::WiFiConnection(const char *SSID, const char *password) : SSID(SSID), password(password)
 {
-  WiFi.begin(SSID, password);
+  this->connect();
 }
 
 void WiFiConnection::connect()
@@ -11,10 +10,21 @@ void WiFiConnection::connect()
   WiFi.begin(this->SSID, this->password);
 }
 
-bool WiFiConnection::inquireConnection()
+bool WiFiConnection::getConnected()
 {
   const bool connected = WiFi.status() == WL_CONNECTED;
-  if (!connected)
-    this->connect();
   return connected;
+}
+
+void WiFiConnection::keepAlive()
+{
+  const bool connected = this->getConnected();
+  reportValue(connected, "wifi");
+  if (connected)
+    return;
+  this->connect();
+}
+
+void WiFiConnection::resolveEvent(WiFiEvent_t event)
+{
 }

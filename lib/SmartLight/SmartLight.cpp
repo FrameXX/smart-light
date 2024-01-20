@@ -37,6 +37,8 @@ void SmartLight::resolveMessage(String message)
 {
   report("new message in channel");
   reportValue(message, "message");
+  // MessageCommand command = MessageCommand::fromString(message);
+  // reportValue(command.commandId, "command id");
 }
 
 void SmartLight::updateTickers()

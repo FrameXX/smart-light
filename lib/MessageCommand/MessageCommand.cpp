@@ -1,8 +1,6 @@
 #include "MessageCommand.h"
 
-MessageCommand::MessageCommand(int cmdType, std::vector<int> args) : commandType(cmdType), arguments(args) {}
-
-MessageCommand::~MessageCommand() {}
+MessageCommand::MessageCommand(int cmdType, std::vector<int> args) : commandId(cmdType), arguments(args) {}
 
 MessageCommand MessageCommand::fromString(String message)
 {
@@ -20,7 +18,7 @@ MessageCommand MessageCommand::fromString(String message)
 
 String MessageCommand::toString()
 {
-  String result = String(commandType);
+  String result = String(commandId);
   for (int arg : arguments)
   {
     result += " ";

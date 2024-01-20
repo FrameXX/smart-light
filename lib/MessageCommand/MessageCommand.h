@@ -5,11 +5,10 @@
 
 class MessageCommand
 {
-private:
-  int commandType;
+public:
+  int commandId;
   std::vector<int> arguments;
 
-public:
   MessageCommand(int cmdType, std::vector<int> args);
 
   static MessageCommand fromString(String message);

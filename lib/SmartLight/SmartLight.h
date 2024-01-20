@@ -7,6 +7,7 @@
 #include <NtfyTopicClient.h>
 #include <Arduino.h>
 #include <Ticker.h>
+#include <MessageCommand.h>
 
 class SmartLight
 {

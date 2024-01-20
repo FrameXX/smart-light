@@ -17,6 +17,4 @@ public:
   bool getConnected();
 
   void keepAlive();
-
-  void resolveEvent(WiFiEvent_t event);
 };

@@ -1,16 +1,9 @@
 #include <NtfyTopicClient.h>
 
-NtfyTopicClient::NtfyTopicClient(WiFiConnection wifiConnection, String topic) : wifiConnection(wifiConnection), topic(topic)
+NtfyTopicClient::NtfyTopicClient(WiFiConnection &wifiConnection, String topic, MessageCallback messageCallback) : wifiConnection(wifiConnection), topic(topic), wifiClient(), websocketClient(), serverURL("wss://ntfy.sh/" + topic + "/ws"), messageCallback(messageCallback)
 {
-  WiFiClientSecure wifiClient;
-  this->wifiClient = wifiClient;
   this->setupWifiClient();
-
-  websockets::WebsocketsClient websocketClient;
-  this->websocketClient = websocketClient;
   this->setupWebsocketClient();
-
-  this->serverURL = "wss://ntfy.sh/" + topic + "/ws";
   this->connect();
 }
 
@@ -28,6 +21,7 @@ void NtfyTopicClient::setupWebsocketClient()
 
 void NtfyTopicClient::connect()
 {
+  report("trying to connect to channel");
   if (!this->wifiConnection.getConnected())
     return;
   this->connected = this->websocketClient.connect(this->serverURL);
@@ -35,13 +29,16 @@ void NtfyTopicClient::connect()
 
 void NtfyTopicClient::disconnect()
 {
+  report("disconnecting from channel");
   this->websocketClient.close();
   this->connected = false;
 }
 
 void NtfyTopicClient::onNewMessage(websockets::WebsocketsMessage message)
 {
-  reportValue(message.data(), "new message");
+  JsonDocument document;
+  deserializeJson(document, message.data());
+  this->messageCallback(document["message"]);
 }
 
 void NtfyTopicClient::postMessage(String message)
@@ -66,7 +63,7 @@ void NtfyTopicClient::sendMessage(String message)
 
 void NtfyTopicClient::keepAlive()
 {
-  reportValue(this->connected, "channel");
+  reportValue(this->connected, "channel connection state");
   if (!this->connected && !this->dispatcher && this->wifiConnection.getConnected())
     this->connect();
 }

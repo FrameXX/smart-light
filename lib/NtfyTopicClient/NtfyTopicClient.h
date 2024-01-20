@@ -3,15 +3,17 @@
 #include <WiFiConnection.h>
 #include <ArduinoWebsockets.h>
 #include <Arduino.h>
-#include <Report.h>
+#include <ArduinoJson.h>
 
 class NtfyTopicClient
 {
 private:
+  typedef std::function<void(String)> MessageCallback;
   WiFiConnection wifiConnection;
   WiFiClientSecure wifiClient;
   websockets::WebsocketsClient websocketClient;
   String topic;
+  MessageCallback messageCallback;
   String serverURL;
   bool connected = false;
   bool dispatcher = false;
@@ -30,7 +32,7 @@ private:
   void postMessage(String message);
 
 public:
-  NtfyTopicClient(WiFiConnection wifiConnection, String topic);
+  NtfyTopicClient(WiFiConnection &wifiConnection, String topic, MessageCallback messageCallback);
 
   void sendMessage(String message);
 

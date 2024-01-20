@@ -7,24 +7,21 @@ WiFiConnection::WiFiConnection(const char *SSID, const char *password) : SSID(SS
 
 void WiFiConnection::connect()
 {
+  report("trying to connect to wifi");
   WiFi.begin(this->SSID, this->password);
 }
 
 bool WiFiConnection::getConnected()
 {
-  const bool connected = WiFi.status() == WL_CONNECTED;
+  const bool connected = WiFi.status() == wl_status_t::WL_CONNECTED;
   return connected;
 }
 
 void WiFiConnection::keepAlive()
 {
   const bool connected = this->getConnected();
-  reportValue(connected, "wifi");
+  reportValue(connected, "wifi connection state");
   if (connected)
     return;
   this->connect();
-}
-
-void WiFiConnection::resolveEvent(WiFiEvent_t event)
-{
 }

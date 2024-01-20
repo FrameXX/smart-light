@@ -21,7 +21,6 @@ void IlluminanceModulatedSupply::update()
 
   const int absoluteBrightness = map(averageIlluminance, this->minBrightnessIluminance, this->maxBrightnessIluminance, 0, 255);
   const int brightness = clamp(absoluteBrightness, 0, 255);
-
   this->supplyPIN.modulate(brightness);
 }
 

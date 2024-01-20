@@ -14,8 +14,9 @@ template <typename Value>
 inline void reportValue(Value value, const char *valueName = "value")
 {
   report(valueName);
-  report(": ", true);
+  report(": \"", true);
   report(value, true);
+  report("\"", true);
 }
 
 inline void omitLine()

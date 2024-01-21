@@ -30,6 +30,8 @@ private:
 
   void resolveMessage(String message);
 
+  void resolveCommand(MessageCommand command);
+
 public:
   SmartLight(Pin &LEDSupplyPin, Pin &IlluminanceSensorSupplyPin, Pin &IlluminanceSensorAnalogPin, String ntfyTopic, const char *wifiSSID, const char *wifiPass);
 

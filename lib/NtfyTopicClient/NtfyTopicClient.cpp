@@ -38,6 +38,8 @@ void NtfyTopicClient::onNewMessage(websockets::WebsocketsMessage message)
 {
   JsonDocument document;
   deserializeJson(document, message.data());
+  if (document["event"] != "message")
+    return;
   this->messageCallback(document["message"]);
 }
 

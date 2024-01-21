@@ -1,18 +1,19 @@
-#include "MessageCommand.h"
+#include <MessageCommand.h>
 
 MessageCommand::MessageCommand(int cmdType, std::vector<int> args) : commandId(cmdType), arguments(args) {}
 
 MessageCommand MessageCommand::fromString(String message)
 {
-  int cmdType = message.toInt();
-  message.remove(0, message.indexOf(' ') + 1);
+  std::vector argsStr = explode(message, ' ');
   std::vector<int> args;
-  while (message.length() > 0)
+
+  for (int i = 0; i < argsStr.size(); i++)
   {
-    int arg = message.toInt();
-    message.remove(0, message.indexOf(' ') + 1);
-    args.push_back(arg);
+    args.push_back(argsStr[i].toInt());
   }
+
+  const int cmdType = args[0];
+  args.erase(args.begin());
   return MessageCommand(cmdType, args);
 }
 

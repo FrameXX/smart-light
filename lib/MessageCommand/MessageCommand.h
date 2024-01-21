@@ -2,6 +2,8 @@
 
 #include <vector>
 #include <Arduino.h>
+#include <Report.h>
+#include <Explode.h>
 
 class MessageCommand
 {

@@ -33,12 +33,16 @@ SmartLight::SmartLight(Pin &LEDSupplyPin,
   this->channelPollingTicker.start();
 }
 
+void SmartLight::resolveCommand(MessageCommand command)
+{
+}
+
 void SmartLight::resolveMessage(String message)
 {
   report("new message in channel");
   reportValue(message, "message");
-  // MessageCommand command = MessageCommand::fromString(message);
-  // reportValue(command.commandId, "command id");
+  MessageCommand command = MessageCommand::fromString(message);
+  this->resolveCommand(command);
 }
 
 void SmartLight::updateTickers()

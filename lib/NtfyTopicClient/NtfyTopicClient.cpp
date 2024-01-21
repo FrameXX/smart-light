@@ -54,6 +54,8 @@ void NtfyTopicClient::postMessage(String message)
 
 void NtfyTopicClient::sendMessage(String message)
 {
+  report("sending message");
+  reportValue(message, "message");
   if (!this->wifiConnection.getConnected())
     return;
   this->dispatcher = true;

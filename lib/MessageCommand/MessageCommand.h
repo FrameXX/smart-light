@@ -15,5 +15,5 @@ public:
 
   static MessageCommand fromString(String message);
 
-  String toString();
+  String toString() const;
 };

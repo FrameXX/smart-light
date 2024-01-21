@@ -8,20 +8,17 @@
 #include <Arduino.h>
 #include <Ticker.h>
 #include <MessageCommand.h>
+#include <SmartLightState.h>
 
 class SmartLight
 {
 private:
-  bool enabled = true;
-
-  Pin LEDSupplyPin;
-  Pin IlluminanceSensorSupplyPin;
-  Pin IlluminanceSensorAnalogPin;
-  IlluminanceSensor illuminanceSensor;
-  IlluminanceModulatedSupply LEDSupply;
+  SmartLightState state = SmartLightState();
+  Pin RLEDSupply;
+  Pin GLEDSupply;
+  Pin BLEDSupply;
   WiFiConnection wifiConnection;
   NtfyTopicClient channel;
-  Ticker adaptiveLEDTicker;
   Ticker wifiConnectionKeepAliveTicker;
   Ticker channelKeepAliveTicker;
   Ticker channelPollingTicker;
@@ -32,8 +29,18 @@ private:
 
   void resolveCommand(MessageCommand command);
 
+  void sendState();
+
+  void applyRGBDutyCycles();
+
+  void disable();
+
+  void enable();
+
+  void loadState(std::vector<int> arguments);
+
 public:
-  SmartLight(Pin &LEDSupplyPin, Pin &IlluminanceSensorSupplyPin, Pin &IlluminanceSensorAnalogPin, String ntfyTopic, const char *wifiSSID, const char *wifiPass);
+  SmartLight(Pin &RLEDSupply, Pin &GLEDSupply, Pin &BLEDSupply, String ntfyTopic, const char *wifiSSID, const char *wifiPass);
 
   void update();
 };

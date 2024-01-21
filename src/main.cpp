@@ -16,11 +16,11 @@ void setup()
     report("start");
   }
 
-  Pin LEDSupplyPin(5);
-  Pin IlluminanceSensorSupplyPin(16);
-  Pin IlluminanceSensorAnalogPin(A0);
+  Pin RLEDSupply(16);
+  Pin GLEDSupply(5);
+  Pin BLEDSupply(4);
 
-  SmartLight light(LEDSupplyPin, IlluminanceSensorSupplyPin, IlluminanceSensorAnalogPin, "smart-light-channel", WIFI_SSID, WIFI_PASS);
+  SmartLight light(RLEDSupply, GLEDSupply, BLEDSupply, "smart-light-channel", WIFI_SSID, WIFI_PASS);
 
   report("setup done");
   while (true)

@@ -1,22 +1,12 @@
 #include <SmartLight.h>
 
-SmartLight::SmartLight(Pin &LEDSupplyPin,
-                       Pin &IlluminanceSensorSupplyPin,
-                       Pin &IlluminanceSensorAnalogPin,
-                       String ntfyTopic,
-                       const char *wifiSSID,
-                       const char *wifiPass)
-    : LEDSupplyPin(LEDSupplyPin),
-      IlluminanceSensorSupplyPin(IlluminanceSensorSupplyPin),
-      IlluminanceSensorAnalogPin(IlluminanceSensorAnalogPin),
-      illuminanceSensor(IlluminanceSensorSupplyPin, IlluminanceSensorAnalogPin),
-      LEDSupply(LEDSupplyPin, illuminanceSensor, 10),
+SmartLight::SmartLight(Pin &RLEDSupply, Pin &GLEDSupply, Pin &BLEDSupply, String ntfyTopic, const char *wifiSSID, const char *wifiPass)
+    : RLEDSupply(RLEDSupply),
+      GLEDSupply(GLEDSupply),
+      BLEDSupply(BLEDSupply),
       wifiConnection(wifiSSID, wifiPass),
       channel(wifiConnection, ntfyTopic, [this](String message)
               { this->resolveMessage(message); }),
-      adaptiveLEDTicker([this]()
-                        { this->LEDSupply.update(); },
-                        25),
       wifiConnectionKeepAliveTicker([this]()
                                     { this->wifiConnection.keepAlive(); },
                                     10000),
@@ -27,14 +17,91 @@ SmartLight::SmartLight(Pin &LEDSupplyPin,
                            { this->channel.pollMessages(); },
                            200)
 {
-  this->adaptiveLEDTicker.start();
   this->wifiConnectionKeepAliveTicker.start();
   this->channelKeepAliveTicker.start();
   this->channelPollingTicker.start();
+
+  this->enable();
+}
+
+void SmartLight::disable()
+{
+  this->state.enabled = false;
+  this->RLEDSupply.modulate(0);
+  this->GLEDSupply.modulate(0);
+  this->BLEDSupply.modulate(0);
+}
+
+void SmartLight::enable()
+{
+  this->state.enabled = true;
+  this->applyRGBDutyCycles();
+}
+
+void SmartLight::applyRGBDutyCycles()
+{
+  this->RLEDSupply.modulate(this->state.RDutyCycle);
+  this->GLEDSupply.modulate(this->state.GDutyCycle);
+  this->BLEDSupply.modulate(this->state.BDutyCycle);
+}
+
+void SmartLight::sendState()
+{
+  const MessageCommand state(1,
+                             {
+                                 int(this->state.enabled),
+                                 int(this->state.RDutyCycle),
+                                 int(this->state.GDutyCycle),
+                                 int(this->state.BDutyCycle),
+                             });
+  const String message = state.toString();
+  this->channel.sendMessage(message);
+}
+
+void SmartLight::loadState(std::vector<int> arguments)
+{
+  const int argumentsCount = arguments.size();
+  reportValue(argumentsCount, "load state command argument count");
+  if (argumentsCount != 4)
+  {
+    report("invalid count of arguments of load state command!");
+    return;
+  }
+
+  if (arguments[0] == 0)
+  {
+    this->state.enabled = false;
+    this->disable();
+  }
+  else
+  {
+    this->state.enabled = true;
+    this->enable();
+  }
+
+  this->state.RDutyCycle = arguments[1];
+  this->state.GDutyCycle = arguments[2];
+  this->state.BDutyCycle = arguments[3];
+
+  this->applyRGBDutyCycles();
 }
 
 void SmartLight::resolveCommand(MessageCommand command)
 {
+  report("resolving command");
+  const int commandId = command.commandId;
+  reportValue(commandId, "command id");
+  switch (commandId)
+  {
+  case 0:
+    this->sendState();
+    break;
+  case 2:
+    this->loadState(command.arguments);
+  default:
+    report("unknown command id?");
+    break;
+  }
 }
 
 void SmartLight::resolveMessage(String message)
@@ -47,7 +114,6 @@ void SmartLight::resolveMessage(String message)
 
 void SmartLight::updateTickers()
 {
-  this->adaptiveLEDTicker.update();
   this->wifiConnectionKeepAliveTicker.update();
   this->channelKeepAliveTicker.update();
   this->channelPollingTicker.update();

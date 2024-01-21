@@ -17,10 +17,10 @@ MessageCommand MessageCommand::fromString(String message)
   return MessageCommand(cmdType, args);
 }
 
-String MessageCommand::toString()
+String MessageCommand::toString() const
 {
-  String result = String(commandId);
-  for (int arg : arguments)
+  String result = String(this->commandId);
+  for (int arg : this->arguments)
   {
     result += " ";
     result += String(arg);

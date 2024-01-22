@@ -40,5 +40,6 @@ int Pin::readDigital()
 
 void Pin::modulate(int dutyFactor)
 {
+  dutyFactor = clamp(dutyFactor, 0, 255);
   analogWrite(this->target, dutyFactor);
 }

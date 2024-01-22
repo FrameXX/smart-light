@@ -1,10 +1,7 @@
 #include <SmartLight.h>
 
 SmartLight::SmartLight(Pin &RLEDSupply, Pin &GLEDSupply, Pin &BLEDSupply, String ntfyTopic, const char *wifiSSID, const char *wifiPass)
-    : RLEDSupply(RLEDSupply),
-      GLEDSupply(GLEDSupply),
-      BLEDSupply(BLEDSupply),
-      wifiConnection(wifiSSID, wifiPass),
+    : wifiConnection(wifiSSID, wifiPass),
       channel(wifiConnection, ntfyTopic, [this](String message)
               { this->resolveMessage(message); }),
       wifiConnectionKeepAliveTicker([this]()
@@ -15,7 +12,8 @@ SmartLight::SmartLight(Pin &RLEDSupply, Pin &GLEDSupply, Pin &BLEDSupply, String
                              5000),
       channelPollingTicker([this]()
                            { this->channel.pollMessages(); },
-                           200)
+                           200),
+      colorLight(RLEDSupply, GLEDSupply, BLEDSupply)
 {
   this->wifiConnectionKeepAliveTicker.start();
   this->channelKeepAliveTicker.start();
@@ -27,9 +25,8 @@ SmartLight::SmartLight(Pin &RLEDSupply, Pin &GLEDSupply, Pin &BLEDSupply, String
 void SmartLight::disable()
 {
   this->state.enabled = false;
-  this->RLEDSupply.modulate(0);
-  this->GLEDSupply.modulate(0);
-  this->BLEDSupply.modulate(0);
+  const RGB color(0, 0, 0);
+  this->colorLight.setColor(color);
 }
 
 void SmartLight::enable()
@@ -42,9 +39,8 @@ void SmartLight::applyRGBDutyCycles()
 {
   if (!this->state.enabled)
     return;
-  this->RLEDSupply.modulate(this->state.RDutyCycle);
-  this->GLEDSupply.modulate(this->state.GDutyCycle);
-  this->BLEDSupply.modulate(this->state.BDutyCycle);
+  const RGB color(this->state.RDutyCycle, this->state.GDutyCycle, this->state.BDutyCycle);
+  this->colorLight.setColor(color);
 }
 
 void SmartLight::sendState()

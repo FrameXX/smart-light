@@ -40,6 +40,8 @@ void SmartLight::enable()
 
 void SmartLight::applyRGBDutyCycles()
 {
+  if (!this->state.enabled)
+    return;
   this->RLEDSupply.modulate(this->state.RDutyCycle);
   this->GLEDSupply.modulate(this->state.GDutyCycle);
   this->BLEDSupply.modulate(this->state.BDutyCycle);
@@ -47,13 +49,7 @@ void SmartLight::applyRGBDutyCycles()
 
 void SmartLight::sendState()
 {
-  const MessageCommand state(1,
-                             {
-                                 int(this->state.enabled),
-                                 int(this->state.RDutyCycle),
-                                 int(this->state.GDutyCycle),
-                                 int(this->state.BDutyCycle),
-                             });
+  const MessageCommand state = this->state.toMessageCommand();
   const String message = state.toString();
   this->channel.sendMessage(message);
 }

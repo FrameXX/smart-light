@@ -1,5 +1,7 @@
 #pragma once
 
+#include <MessageCommand.h>
+
 class SmartLightState
 {
 public:
@@ -9,4 +11,6 @@ public:
   unsigned char BDutyCycle = 255;
 
   SmartLightState();
+
+  MessageCommand toMessageCommand() const;
 };

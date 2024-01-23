@@ -4,20 +4,12 @@ SmartLight::SmartLight(Pin &RLEDSupply, Pin &GLEDSupply, Pin &BLEDSupply, String
     : wifiConnection(wifiSSID, wifiPass),
       channel(wifiConnection, ntfyTopic, [this](String message)
               { this->resolveMessage(message); }),
-      wifiConnectionKeepAliveTicker([this]()
-                                    { this->wifiConnection.keepAlive(); },
-                                    10000),
-      channelKeepAliveTicker([this]()
-                             { this->channel.keepAlive(); },
-                             5000),
-      channelPollingTicker([this]()
-                           { this->channel.pollMessages(); },
-                           200),
       colorLight(RLEDSupply, GLEDSupply, BLEDSupply)
 {
   this->wifiConnectionKeepAliveTicker.start();
   this->channelKeepAliveTicker.start();
   this->channelPollingTicker.start();
+  this->hueAnimationTicker.start();
 
   this->enable();
 }
@@ -39,7 +31,7 @@ void SmartLight::applyRGBDutyCycles()
 {
   if (!this->state.enabled)
     return;
-  const RGB color(this->state.RDutyCycle, this->state.GDutyCycle, this->state.BDutyCycle);
+  RGB color(this->state.RDutyCycle, this->state.GDutyCycle, this->state.BDutyCycle);
   this->colorLight.setColor(color);
 }
 
@@ -75,6 +67,19 @@ void SmartLight::loadState(std::vector<int> arguments)
   this->state.GDutyCycle = arguments[2];
   this->state.BDutyCycle = arguments[3];
 
+  if (arguments[4] == 0)
+  {
+    this->state.hueAnimationEnabled = false;
+    this->hueAnimationTicker.pause();
+  }
+  else
+  {
+    this->state.hueAnimationEnabled = true;
+    this->hueAnimationTicker.resume();
+  }
+
+  this->hueAnimation.setInterval(arguments[5]);
+
   this->applyRGBDutyCycles();
 }
 
@@ -109,6 +114,7 @@ void SmartLight::updateTickers()
   this->wifiConnectionKeepAliveTicker.update();
   this->channelKeepAliveTicker.update();
   this->channelPollingTicker.update();
+  this->hueAnimationTicker.update();
 }
 
 void SmartLight::update()

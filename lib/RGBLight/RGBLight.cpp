@@ -10,7 +10,7 @@ RGBLight::RGBLight(Pin &RLEDSupply,
 
 void RGBLight::setColor(RGB color)
 {
-  this->RLEDSupply.modulate(color.R);
-  this->GLEDSupply.modulate(color.G);
-  this->BLEDSupply.modulate(color.B);
+  this->RLEDSupply.modulate(color.getR());
+  this->GLEDSupply.modulate(color.getG());
+  this->BLEDSupply.modulate(color.getB());
 }

@@ -1,9 +1,9 @@
 #pragma once
 
 #include <Arduino.h>
-#include <RGBLight.h>
-#include <RGB.h>
 #include <Report.h>
+#include <RGB.h>
+#include <RGBLight.h>
 
 class HueAnimation
 {
@@ -23,8 +23,14 @@ private:
   unsigned char updateDiff;
   unsigned long lastMillis = 0;
   Phase phase = PhaseGreenUp;
+  RGB currentColor = RGB(255, 0, 0);
+  float stepTimeMs;
 
   void updateLastMillis();
+
+  void updateStepTimeMs();
+
+  void nextPhase();
 
 public:
   HueAnimation(RGBLight &light,

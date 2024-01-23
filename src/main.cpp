@@ -2,6 +2,7 @@
 #include <Report.h>
 #include <WifiCredentials.h>
 #include <SmartLight.h>
+#include <RGB.h>
 
 #define DEBUG true
 

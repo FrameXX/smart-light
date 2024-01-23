@@ -9,8 +9,9 @@
 #include <Ticker.h>
 #include <MessageCommand.h>
 #include <SmartLightState.h>
-#include <RGBLight.h>
 #include <RGB.h>
+#include <RGBLight.h>
+#include <HueAnimation.h>
 
 class SmartLight
 {
@@ -18,10 +19,20 @@ private:
   SmartLightState state = SmartLightState();
   WiFiConnection wifiConnection;
   NtfyTopicClient channel;
-  Ticker wifiConnectionKeepAliveTicker;
-  Ticker channelKeepAliveTicker;
-  Ticker channelPollingTicker;
   RGBLight colorLight;
+  HueAnimation hueAnimation = HueAnimation(this->colorLight, this->state.hueAnimationIntervalMs);
+  Ticker wifiConnectionKeepAliveTicker = Ticker([this]()
+                                                { this->wifiConnection.keepAlive(); },
+                                                10000);
+  Ticker channelKeepAliveTicker = Ticker([this]()
+                                         { this->channel.keepAlive(); },
+                                         5000);
+  Ticker channelPollingTicker = Ticker([this]()
+                                       { this->channel.pollMessages(); },
+                                       200);
+  Ticker hueAnimationTicker = Ticker([this]()
+                                     { this->hueAnimation.update(); },
+                                     25);
 
   void updateTickers();
 

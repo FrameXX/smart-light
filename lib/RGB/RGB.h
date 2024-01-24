@@ -10,7 +10,9 @@ private:
   unsigned char B;
 
 public:
-  RGB(unsigned char R, unsigned char G, unsigned char B);
+  RGB(unsigned char R,
+      unsigned char G,
+      unsigned char B);
 
   void setR(unsigned char R);
   void setG(unsigned char G);

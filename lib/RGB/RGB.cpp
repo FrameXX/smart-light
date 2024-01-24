@@ -1,5 +1,13 @@
 #include <RGB.h>
 
+RGB::RGB(unsigned char R,
+         unsigned char G,
+         unsigned char B) : R(R),
+                            G(G),
+                            B(B)
+{
+}
+
 void RGB::setR(unsigned char R)
 {
   this->R = clamp(R, static_cast<unsigned char>(0), static_cast<unsigned char>(255));

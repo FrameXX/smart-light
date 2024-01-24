@@ -78,6 +78,7 @@ void SmartLight::loadState(std::vector<int> arguments)
     this->hueAnimationTicker.resume();
   }
 
+  this->state.hueAnimationIntervalMs = arguments[5];
   this->hueAnimation.setInterval(arguments[5]);
 
   this->applyRGBDutyCycles();

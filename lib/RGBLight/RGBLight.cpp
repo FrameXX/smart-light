@@ -10,7 +10,11 @@ RGBLight::RGBLight(Pin &RLEDSupply,
 
 void RGBLight::setColor(RGB color)
 {
-  this->RLEDSupply.modulate(color.getR());
-  this->GLEDSupply.modulate(color.getG());
-  this->BLEDSupply.modulate(color.getB());
+  const unsigned char R = amplify(int(color.getR()), 0, 255, 2);
+  const unsigned char G = amplify(int(color.getG()), 0, 255, 2);
+  const unsigned char B = amplify(int(color.getB()), 0, 255, 2);
+
+  this->RLEDSupply.modulate(R);
+  this->GLEDSupply.modulate(G);
+  this->BLEDSupply.modulate(B);
 }

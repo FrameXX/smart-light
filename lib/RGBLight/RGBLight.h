@@ -2,6 +2,7 @@
 
 #include <Pin.h>
 #include <RGB.h>
+#include <Amplify.h>
 
 class RGBLight
 {

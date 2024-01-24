@@ -16,7 +16,7 @@ void HueAnimation::updateLastMillis()
 
 void HueAnimation::updateStepTimeMs()
 {
-  this->stepTimeMs = static_cast<float>(this->intervalMs) / 1530.0;
+  this->stepTimeMs = static_cast<float>(this->intervalMs) / 768.0;
 }
 
 void HueAnimation::setInterval(int intervalMs)
@@ -64,32 +64,38 @@ void HueAnimation::update()
   {
   case PhaseGreenUp:
     this->currentColor.addG(step);
-    if (this->currentColor.getG() == 255)
+    this->currentColor.subtractB(step);
+    if (this->currentColor.getG() >= 128)
       this->nextPhase();
     break;
   case PhaseRedDown:
     this->currentColor.subtractR(step);
-    if (this->currentColor.getR() == 0)
+    this->currentColor.addG(step);
+    if (this->currentColor.getR() < 128)
       this->nextPhase();
     break;
   case PhaseBlueUp:
     this->currentColor.addB(step);
-    if (this->currentColor.getB() == 255)
+    this->currentColor.subtractR(step);
+    if (this->currentColor.getB() >= 128)
       this->nextPhase();
     break;
   case PhaseGreenDown:
     this->currentColor.subtractG(step);
-    if (this->currentColor.getG() == 0)
+    this->currentColor.addB(step);
+    if (this->currentColor.getG() < 128)
       this->nextPhase();
     break;
   case PhaseRedUp:
     this->currentColor.addR(step);
-    if (this->currentColor.getR() == 255)
+    this->currentColor.subtractG(step);
+    if (this->currentColor.getR() >= 128)
       this->nextPhase();
     break;
   case PhaseBlueDown:
     this->currentColor.subtractB(step);
-    if (this->currentColor.getB() == 0)
+    this->currentColor.addR(step);
+    if (this->currentColor.getB() < 128)
       this->nextPhase();
     break;
   default:

@@ -23,7 +23,7 @@ private:
   unsigned char updateDiff;
   unsigned long lastMillis = 0;
   Phase phase = PhaseGreenUp;
-  RGB currentColor = RGB(255, 0, 0);
+  RGB currentColor = RGB(255, 0, 128);
   float stepTimeMs;
 
   void updateLastMillis();

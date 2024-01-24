@@ -46,7 +46,7 @@ void SmartLight::loadState(std::vector<int> arguments)
 {
   const int argumentsCount = arguments.size();
   reportValue(argumentsCount, "load state command argument count");
-  if (argumentsCount != 4)
+  if (argumentsCount != 6)
   {
     report("invalid count of arguments of load state command!");
     return;

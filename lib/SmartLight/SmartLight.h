@@ -48,6 +48,10 @@ private:
 
   void enable();
 
+  void disableHueAnimation();
+
+  void enableHueAnimation();
+
   void loadState(std::vector<int> arguments);
 
 public:

@@ -19,12 +19,26 @@ void SmartLight::disable()
   this->state.enabled = false;
   const RGB color(0, 0, 0);
   this->colorLight.setColor(color);
+  this->hueAnimationTicker.pause();
 }
 
 void SmartLight::enable()
 {
   this->state.enabled = true;
   this->applyRGBDutyCycles();
+}
+
+void SmartLight::enableHueAnimation()
+{
+  this->state.hueAnimationEnabled = true;
+  if (this->state.enabled)
+    this->hueAnimationTicker.resume();
+}
+
+void SmartLight::disableHueAnimation()
+{
+  this->state.hueAnimationEnabled = false;
+  this->hueAnimationTicker.pause();
 }
 
 void SmartLight::applyRGBDutyCycles()
@@ -52,31 +66,13 @@ void SmartLight::loadState(std::vector<int> arguments)
     return;
   }
 
-  if (arguments[0] == 0)
-  {
-    this->state.enabled = false;
-    this->disable();
-  }
-  else
-  {
-    this->state.enabled = true;
-    this->enable();
-  }
+  arguments[0] == 0 ? this->disable() : this->enable();
 
   this->state.RDutyCycle = arguments[1];
   this->state.GDutyCycle = arguments[2];
   this->state.BDutyCycle = arguments[3];
 
-  if (arguments[4] == 0)
-  {
-    this->state.hueAnimationEnabled = false;
-    this->hueAnimationTicker.pause();
-  }
-  else
-  {
-    this->state.hueAnimationEnabled = true;
-    this->hueAnimationTicker.resume();
-  }
+  arguments[4] == 0 ? this->disableHueAnimation() : this->enableHueAnimation();
 
   this->state.hueAnimationIntervalMs = arguments[5];
   this->hueAnimation.setInterval(arguments[5]);

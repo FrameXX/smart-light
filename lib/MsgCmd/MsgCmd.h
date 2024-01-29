@@ -5,15 +5,15 @@
 #include <Report.h>
 #include <Explode.h>
 
-class MessageCommand
+class MsgCmd
 {
 public:
   int commandId;
   std::vector<int> arguments;
 
-  MessageCommand(int cmdType, std::vector<int> args);
+  MsgCmd(int cmdType, std::vector<int> args);
 
-  static MessageCommand fromString(String message);
+  static MsgCmd fromString(String message);
 
   String toString() const;
 };

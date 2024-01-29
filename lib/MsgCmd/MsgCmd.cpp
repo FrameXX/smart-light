@@ -1,8 +1,8 @@
-#include <MessageCommand.h>
+#include <MsgCmd.h>
 
-MessageCommand::MessageCommand(int cmdType, std::vector<int> args) : commandId(cmdType), arguments(args) {}
+MsgCmd::MsgCmd(int cmdType, std::vector<int> args) : commandId(cmdType), arguments(args) {}
 
-MessageCommand MessageCommand::fromString(String message)
+MsgCmd MsgCmd::fromString(String message)
 {
   std::vector argsStr = explode(message, ' ');
   std::vector<int> args;
@@ -14,10 +14,10 @@ MessageCommand MessageCommand::fromString(String message)
 
   const int cmdType = args[0];
   args.erase(args.begin());
-  return MessageCommand(cmdType, args);
+  return MsgCmd(cmdType, args);
 }
 
-String MessageCommand::toString() const
+String MsgCmd::toString() const
 {
   String result = String(this->commandId);
   for (int arg : this->arguments)

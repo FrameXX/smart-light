@@ -51,7 +51,7 @@ void SmartLight::applyRGBDutyCycles()
 
 void SmartLight::sendState()
 {
-  const MessageCommand state = this->state.toMessageCommand();
+  const MsgCmd state = this->state.toMsgCmd();
   const String message = state.toString();
   this->channel.sendMessage(message);
 }
@@ -80,7 +80,7 @@ void SmartLight::loadState(std::vector<int> arguments)
   this->applyRGBDutyCycles();
 }
 
-void SmartLight::resolveCommand(MessageCommand command)
+void SmartLight::resolveCommand(MsgCmd command)
 {
   report("resolving command");
   const int commandId = command.commandId;
@@ -102,7 +102,7 @@ void SmartLight::resolveMessage(String message)
 {
   report("new message in channel");
   reportValue(message, "message");
-  MessageCommand command = MessageCommand::fromString(message);
+  MsgCmd command = MsgCmd::fromString(message);
   this->resolveCommand(command);
 }
 

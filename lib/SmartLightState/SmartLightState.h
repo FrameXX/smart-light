@@ -1,6 +1,6 @@
 #pragma once
 
-#include <MessageCommand.h>
+#include <MsgCmd.h>
 
 class SmartLightState
 {
@@ -14,5 +14,5 @@ public:
 
   SmartLightState();
 
-  MessageCommand toMessageCommand() const;
+  MsgCmd toMsgCmd() const;
 };

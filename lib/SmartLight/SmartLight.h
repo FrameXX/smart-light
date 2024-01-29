@@ -7,7 +7,7 @@
 #include <NtfyTopicClient.h>
 #include <Arduino.h>
 #include <Ticker.h>
-#include <MessageCommand.h>
+#include <MsgCmd.h>
 #include <SmartLightState.h>
 #include <RGB.h>
 #include <RGBLight.h>
@@ -38,7 +38,7 @@ private:
 
   void resolveMessage(String message);
 
-  void resolveCommand(MessageCommand command);
+  void resolveCommand(MsgCmd command);
 
   void sendState();
 

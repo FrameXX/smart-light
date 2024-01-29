@@ -2,9 +2,9 @@
 
 SmartLightState::SmartLightState() {}
 
-MessageCommand SmartLightState::toMessageCommand() const
+MsgCmd SmartLightState::toMsgCmd() const
 {
-  const MessageCommand state(1,
+  const MsgCmd state(1,
                              {int(this->enabled),
                               int(this->RDutyCycle),
                               int(this->GDutyCycle),

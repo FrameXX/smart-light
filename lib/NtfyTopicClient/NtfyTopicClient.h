@@ -4,19 +4,13 @@
 #include <ArduinoWebsockets.h>
 #include <Arduino.h>
 #include <ArduinoJson.h>
+#include <WsMsgChannelClient.h>
 
-class NtfyTopicClient
+class NtfyTopicClient : public WsMsgChannelClient
 {
 private:
-  typedef std::function<void(String)> MessageCallback;
-  WiFiConnection wifiConnection;
-  WiFiClientSecure wifiClient;
-  websockets::WebsocketsClient websocketClient;
   String topic;
-  MessageCallback messageCallback;
-  String serverURL;
-  bool connected = false;
-  bool dispatcher = false;
+  bool busy = false;
 
   void
   onNewMessage(websockets::WebsocketsMessage message);
@@ -24,10 +18,6 @@ private:
   void setupWifiClient();
 
   void setupWebsocketClient();
-
-  void connect();
-
-  void disconnect();
 
   void postMessage(String message);
 

@@ -1,6 +1,13 @@
 #include <NtfyTopicClient.h>
 
-NtfyTopicClient::NtfyTopicClient(WiFiConnection &wifiConnection, String topic, MessageCallback messageCallback) : wifiConnection(wifiConnection), topic(topic), wifiClient(), websocketClient(), serverURL("wss://ntfy.sh/" + topic + "/ws"), messageCallback(messageCallback)
+NtfyTopicClient::NtfyTopicClient(WiFiConnection &wifiConnection,
+                                 String topic,
+                                 MessageCallback messageCallback) : WsMsgChannelClient(wifiConnection,
+                                                                                       wifiClient,
+                                                                                       websocketClient,
+                                                                                       messageCallback,
+                                                                                       "wss://ntfy.sh/" + topic + "/ws"),
+                                                                    topic(topic)
 {
   this->setupWifiClient();
   this->setupWebsocketClient();
@@ -17,21 +24,6 @@ void NtfyTopicClient::setupWebsocketClient()
   this->websocketClient.setInsecure();
   this->websocketClient.onMessage([this](const websockets::WebsocketsMessage &message)
                                   { this->onNewMessage(message); });
-}
-
-void NtfyTopicClient::connect()
-{
-  report("trying to connect to channel");
-  if (!this->wifiConnection.getConnected())
-    return;
-  this->connected = this->websocketClient.connect(this->serverURL);
-}
-
-void NtfyTopicClient::disconnect()
-{
-  report("disconnecting from channel");
-  this->websocketClient.close();
-  this->connected = false;
 }
 
 void NtfyTopicClient::onNewMessage(websockets::WebsocketsMessage message)
@@ -58,17 +50,17 @@ void NtfyTopicClient::sendMessage(String message)
   reportValue(message, "message");
   if (!this->wifiConnection.getConnected())
     return;
-  this->dispatcher = true;
+  this->busy = true;
   this->disconnect();
   this->postMessage(message);
   this->connect();
-  this->dispatcher = false;
+  this->busy = false;
 }
 
 void NtfyTopicClient::keepAlive()
 {
   reportValue(this->connected, "channel connection state");
-  if (!this->connected && !this->dispatcher && this->wifiConnection.getConnected())
+  if (!this->connected && !this->busy && this->wifiConnection.getConnected())
     this->connect();
 }
 

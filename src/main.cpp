@@ -1,6 +1,6 @@
 #include <Pin.h>
 #include <Report.h>
-#include <WifiCredentials.h>
+#include <WiFiCredentials.h>
 #include <SmartLight.h>
 #include <RGB.h>
 

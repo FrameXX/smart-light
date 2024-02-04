@@ -22,7 +22,7 @@ private:
   void postMessage(String message);
 
 public:
-  NtfyTopicClient(WiFiConnection &wifiConnection, String topic, MessageCallback messageCallback);
+  NtfyTopicClient(WiFiConnection &wifiConnection, String topic, MsgCallback messageCallback);
 
   void sendMessage(String message);
 

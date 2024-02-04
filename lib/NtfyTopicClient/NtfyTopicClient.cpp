@@ -2,7 +2,7 @@
 
 NtfyTopicClient::NtfyTopicClient(WiFiConnection &wifiConnection,
                                  String topic,
-                                 MessageCallback messageCallback) : WsMsgChannelClient(wifiConnection,
+                                 MsgCallback messageCallback) : WsMsgChannelClient(wifiConnection,
                                                                                        wifiClient,
                                                                                        websocketClient,
                                                                                        messageCallback,

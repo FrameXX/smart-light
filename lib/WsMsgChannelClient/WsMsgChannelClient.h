@@ -8,18 +8,18 @@
 class WsMsgChannelClient
 {
 protected:
-  typedef std::function<void(String)> MessageCallback;
+  typedef std::function<void(String)> MsgCallback;
   WiFiConnection wifiConnection;
   WiFiClientSecure wifiClient;
   websockets::WebsocketsClient websocketClient;
-  MessageCallback messageCallback;
+  MsgCallback messageCallback;
   String serverURL;
   bool connected = false;
 
   WsMsgChannelClient(WiFiConnection &wifiConnection,
                      WiFiClientSecure &wifiClient,
                      websockets::WebsocketsClient &websocketClient,
-                     MessageCallback messageCallback,
+                     MsgCallback messageCallback,
                      String serverURL);
 
   void connect();

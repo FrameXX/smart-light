@@ -3,7 +3,7 @@
 WsMsgChannelClient::WsMsgChannelClient(WiFiConnection &wifiConnection,
                                        WiFiClientSecure &wifiClient,
                                        websockets::WebsocketsClient &websocketClient,
-                                       MessageCallback messageCallback,
+                                       MsgCallback messageCallback,
                                        String serverURL) : wifiConnection(wifiConnection),
                                                            wifiClient(wifiClient),
                                                            websocketClient(websocketClient),

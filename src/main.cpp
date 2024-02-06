@@ -3,7 +3,6 @@
 #include <WiFiCredentials.h>
 #include <SmartLight.h>
 #include <RGB.h>
-#include <WiFi.h>
 
 #define DEBUG true
 

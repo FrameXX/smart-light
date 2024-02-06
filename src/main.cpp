@@ -3,12 +3,13 @@
 #include <WiFiCredentials.h>
 #include <SmartLight.h>
 #include <RGB.h>
+#include <WiFi.h>
 
 #define DEBUG true
 
 void setup()
 {
-  initSerial();
+  initSerial(115200);
   report("Serial initiated.");
   if (DEBUG)
   {
@@ -26,7 +27,7 @@ void setup()
   report("setup done");
   while (true)
   {
-    delay(10);
+    delay(50);
     light.update();
   }
 }

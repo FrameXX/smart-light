@@ -2,12 +2,14 @@
 
 WiFiConnection::WiFiConnection(const char *SSID, const char *password) : SSID(SSID), password(password)
 {
+  WiFi.mode(WIFI_MODE_STA);
   this->connect();
 }
 
 void WiFiConnection::connect()
 {
   report("trying to connect to wifi");
+  delay(1000);
   WiFi.begin(this->SSID, this->password);
 }
 

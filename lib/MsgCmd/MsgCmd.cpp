@@ -4,7 +4,7 @@ MsgCmd::MsgCmd(int cmdType, std::vector<int> args) : commandId(cmdType), argumen
 
 MsgCmd MsgCmd::fromString(String message)
 {
-  std::vector argsStr = explode(message, ' ');
+  std::vector<String> argsStr = explode(message, ' ');
   std::vector<int> args;
 
   for (int i = 0; i < argsStr.size(); i++)

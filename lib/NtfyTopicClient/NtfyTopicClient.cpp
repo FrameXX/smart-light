@@ -2,16 +2,31 @@
 
 NtfyTopicClient::NtfyTopicClient(WiFiConnection &wifiConnection,
                                  String topic,
-                                 MsgCallback messageCallback) : WsMsgChannelClient(wifiConnection,
-                                                                                       wifiClient,
-                                                                                       websocketClient,
-                                                                                       messageCallback,
-                                                                                       "wss://ntfy.sh/" + topic + "/ws"),
-                                                                    topic(topic)
+                                 MsgCallback messageCallback) : wifiConnection(wifiConnection),
+                                                                wifiClient(wifiClient),
+                                                                websocketClient(websocketClient),
+                                                                messageCallback(messageCallback),
+                                                                serverURL(serverURL),
+                                                                topic(topic)
 {
   this->setupWifiClient();
   this->setupWebsocketClient();
   this->connect();
+}
+
+void NtfyTopicClient::connect()
+{
+  report("trying to connect to channel");
+  if (!this->wifiConnection.getConnected())
+    return;
+  this->connected = this->websocketClient.connect(this->serverURL);
+}
+
+void NtfyTopicClient::disconnect()
+{
+  report("disconnecting from channel");
+  this->websocketClient.close();
+  this->connected = false;
 }
 
 void NtfyTopicClient::setupWifiClient()
